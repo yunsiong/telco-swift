@@ -1,6 +1,6 @@
-import CFrida
+import CTelco
 
-@objc(FridaChildDetails)
+@objc(TelcoChildDetails)
 public class ChildDetails: NSObject, NSCopying {
     private let handle: OpaquePointer
 
@@ -18,47 +18,47 @@ public class ChildDetails: NSObject, NSCopying {
     }
 
     public var pid: UInt {
-        return UInt(frida_child_get_pid(handle))
+        return UInt(telco_child_get_pid(handle))
     }
 
     public var parentPid: UInt {
-        return UInt(frida_child_get_parent_pid(handle))
+        return UInt(telco_child_get_parent_pid(handle))
     }
 
     public var origin: ChildOrigin {
-        return ChildOrigin(rawValue: frida_child_get_origin(handle).rawValue)!
+        return ChildOrigin(rawValue: telco_child_get_origin(handle).rawValue)!
     }
 
     public var identifier: String? {
-        if let rawIdentifier = frida_child_get_identifier(handle) {
+        if let rawIdentifier = telco_child_get_identifier(handle) {
             return String(cString: rawIdentifier)
         }
         return nil
     }
 
     public var path: String? {
-        if let rawPath = frida_child_get_path(handle) {
+        if let rawPath = telco_child_get_path(handle) {
             return String(cString: rawPath)
         }
         return nil
     }
 
     public var argv: [String]? {
-        if let rawArgv = frida_child_get_argv(handle, nil) {
+        if let rawArgv = telco_child_get_argv(handle, nil) {
             return Marshal.arrayFromStrv(rawArgv)
         }
         return nil
     }
 
     public var envp: [String: String]? {
-        if let rawEnvp = frida_child_get_envp(handle, nil) {
+        if let rawEnvp = telco_child_get_envp(handle, nil) {
             return Marshal.dictionaryFromEnvp(rawEnvp)
         }
         return nil
     }
 
     public override var description: String {
-        return "Frida.ChildDetails(pid: \(pid), parentPid: \(parentPid), origin: \(origin), identifier: \(String(describing: identifier)), path: \(String(describing: path))), argv: \(String(describing: argv))), envp: \(String(describing: envp)))"
+        return "Telco.ChildDetails(pid: \(pid), parentPid: \(parentPid), origin: \(origin), identifier: \(String(describing: identifier)), path: \(String(describing: path))), argv: \(String(describing: argv))), envp: \(String(describing: envp)))"
     }
 
     public override func isEqual(_ object: Any?) -> Bool {
@@ -74,7 +74,7 @@ public class ChildDetails: NSObject, NSCopying {
     }
 }
 
-@objc(FridaChildOrigin)
+@objc(TelcoChildOrigin)
 public enum ChildOrigin: UInt32, CustomStringConvertible {
     case fork
     case exec

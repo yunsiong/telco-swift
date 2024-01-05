@@ -1,6 +1,6 @@
-import CFrida
+import CTelco
 
-@objc(FridaDeviceManager)
+@objc(TelcoDeviceManager)
 public class DeviceManager: NSObject, NSCopying {
     public weak var delegate: DeviceManagerDelegate?
 
@@ -25,9 +25,9 @@ public class DeviceManager: NSObject, NSCopying {
     private var onRemovedHandler: gulong = 0
 
     public convenience override init() {
-        frida_init()
+        telco_init()
 
-        self.init(handle: frida_device_manager_new())
+        self.init(handle: telco_device_manager_new())
     }
 
     init(handle: OpaquePointer) {
@@ -55,7 +55,7 @@ public class DeviceManager: NSObject, NSCopying {
     deinit {
         let rawHandle = gpointer(handle)
         let handlers = [onAddedHandler, onRemovedHandler, onChangedHandler]
-        Runtime.scheduleOnFridaThread {
+        Runtime.scheduleOnTelcoThread {
             for handler in handlers {
                 g_signal_handler_disconnect(rawHandle, handler)
             }
@@ -64,7 +64,7 @@ public class DeviceManager: NSObject, NSCopying {
     }
 
     public override var description: String {
-        return "Frida.DeviceManager()"
+        return "Telco.DeviceManager()"
     }
 
     public override func isEqual(_ object: Any?) -> Bool {
@@ -80,11 +80,11 @@ public class DeviceManager: NSObject, NSCopying {
     }
 
     public func close(_ completionHandler: @escaping CloseComplete = {}) {
-        Runtime.scheduleOnFridaThread {
-            frida_device_manager_close(self.handle, nil, { source, result, data in
+        Runtime.scheduleOnTelcoThread {
+            telco_device_manager_close(self.handle, nil, { source, result, data in
                 let operation = Unmanaged<AsyncOperation<CloseComplete>>.fromOpaque(UnsafeRawPointer(data)!).takeRetainedValue()
 
-                frida_device_manager_close_finish(OpaquePointer(source), result, nil)
+                telco_device_manager_close_finish(OpaquePointer(source), result, nil)
 
                 Runtime.scheduleOnMainThread {
                     operation.completionHandler()
@@ -94,12 +94,12 @@ public class DeviceManager: NSObject, NSCopying {
     }
 
     public func enumerateDevices(_ completionHandler: @escaping EnumerateDevicesComplete) {
-        Runtime.scheduleOnFridaThread {
-            frida_device_manager_enumerate_devices(self.handle, nil, { source, result, data in
+        Runtime.scheduleOnTelcoThread {
+            telco_device_manager_enumerate_devices(self.handle, nil, { source, result, data in
                 let operation = Unmanaged<AsyncOperation<EnumerateDevicesComplete>>.fromOpaque(data!).takeRetainedValue()
 
                 var rawError: UnsafeMutablePointer<GError>? = nil
-                let rawDevices = frida_device_manager_enumerate_devices_finish(OpaquePointer(source), result, &rawError)
+                let rawDevices = telco_device_manager_enumerate_devices_finish(OpaquePointer(source), result, &rawError)
                 if let rawError = rawError {
                     let error = Marshal.takeNativeError(rawError)
                     Runtime.scheduleOnMainThread {
@@ -109,9 +109,9 @@ public class DeviceManager: NSObject, NSCopying {
                 }
 
                 var devices: [Device] = []
-                let n = frida_device_list_size(rawDevices)
+                let n = telco_device_list_size(rawDevices)
                 for i in 0..<n {
-                    let device = Device(handle: frida_device_list_get(rawDevices, i))
+                    let device = Device(handle: telco_device_list_get(rawDevices, i))
                     devices.append(device)
                 }
                 g_object_unref(gpointer(rawDevices))
@@ -125,8 +125,8 @@ public class DeviceManager: NSObject, NSCopying {
 
     public func addRemoteDevice(address: String, certificate: String? = nil, origin: String? = nil, token: String? = nil,
                                 keepaliveInterval: Int? = nil, completionHandler: @escaping AddRemoteDeviceComplete = { _ in }) {
-        Runtime.scheduleOnFridaThread {
-            let options = frida_remote_device_options_new()
+        Runtime.scheduleOnTelcoThread {
+            let options = telco_remote_device_options_new()
             defer {
                 g_object_unref(gpointer(options))
             }
@@ -134,7 +134,7 @@ public class DeviceManager: NSObject, NSCopying {
             if let certificate = certificate {
                 do {
                     let rawCertificate = try Marshal.certificateFromString(certificate)
-                    frida_remote_device_options_set_certificate(options, rawCertificate)
+                    telco_remote_device_options_set_certificate(options, rawCertificate)
                     g_object_unref(rawCertificate)
                 } catch let error {
                     Runtime.scheduleOnMainThread {
@@ -145,22 +145,22 @@ public class DeviceManager: NSObject, NSCopying {
             }
 
             if let origin = origin {
-                frida_remote_device_options_set_origin(options, origin)
+                telco_remote_device_options_set_origin(options, origin)
             }
 
             if let token = token {
-                frida_remote_device_options_set_token(options, token)
+                telco_remote_device_options_set_token(options, token)
             }
 
             if let keepaliveInterval = keepaliveInterval {
-                frida_remote_device_options_set_keepalive_interval(options, gint(keepaliveInterval))
+                telco_remote_device_options_set_keepalive_interval(options, gint(keepaliveInterval))
             }
 
-            frida_device_manager_add_remote_device(self.handle, address, options, nil, { source, result, data in
+            telco_device_manager_add_remote_device(self.handle, address, options, nil, { source, result, data in
                 let operation = Unmanaged<AsyncOperation<AddRemoteDeviceComplete>>.fromOpaque(data!).takeRetainedValue()
 
                 var rawError: UnsafeMutablePointer<GError>? = nil
-                let rawDevice = frida_device_manager_add_remote_device_finish(OpaquePointer(source), result, &rawError)
+                let rawDevice = telco_device_manager_add_remote_device_finish(OpaquePointer(source), result, &rawError)
                 if let rawError = rawError {
                     let error = Marshal.takeNativeError(rawError)
                     Runtime.scheduleOnMainThread {
@@ -179,12 +179,12 @@ public class DeviceManager: NSObject, NSCopying {
     }
 
     public func removeRemoteDevice(address: String, completionHandler: @escaping RemoveRemoteDeviceComplete = { _ in }) {
-        Runtime.scheduleOnFridaThread {
-            frida_device_manager_remove_remote_device(self.handle, address, nil, { source, result, data in
+        Runtime.scheduleOnTelcoThread {
+            telco_device_manager_remove_remote_device(self.handle, address, nil, { source, result, data in
                 let operation = Unmanaged<AsyncOperation<RemoveRemoteDeviceComplete>>.fromOpaque(data!).takeRetainedValue()
 
                 var rawError: UnsafeMutablePointer<GError>? = nil
-                frida_device_manager_remove_remote_device_finish(OpaquePointer(source), result, &rawError)
+                telco_device_manager_remove_remote_device_finish(OpaquePointer(source), result, &rawError)
                 if let rawError = rawError {
                     let error = Marshal.takeNativeError(rawError)
                     Runtime.scheduleOnMainThread {

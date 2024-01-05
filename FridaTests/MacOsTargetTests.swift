@@ -1,5 +1,5 @@
 import XCTest
-@testable import Frida
+@testable import Telco
 
 class MacOsTargetTests: XCTestCase {
     lazy var manager = DeviceManager()
@@ -89,7 +89,7 @@ class MacOsTargetTests: XCTestCase {
             case .success:
                 XCTFail("RPC call unexpectedly succeeded.")
             case let .error(untypedError):
-                guard case let Frida.Error.rpcError(_, stackTrace) = untypedError else {
+                guard case let Telco.Error.rpcError(_, stackTrace) = untypedError else {
                     XCTFail("Didn't receive expected RPC error.")
                     break
                 }

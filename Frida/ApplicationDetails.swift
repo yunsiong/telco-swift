@@ -1,6 +1,6 @@
-import CFrida
+import CTelco
 
-@objc(FridaApplicationDetails)
+@objc(TelcoApplicationDetails)
 public class ApplicationDetails: NSObject, NSCopying {
     private let handle: OpaquePointer
 
@@ -18,20 +18,20 @@ public class ApplicationDetails: NSObject, NSCopying {
     }
 
     public var identifier: String {
-        return String(cString: frida_application_get_identifier(handle))
+        return String(cString: telco_application_get_identifier(handle))
     }
 
     public var name: String {
-        return String(cString: frida_application_get_name(handle))
+        return String(cString: telco_application_get_name(handle))
     }
 
     public var pid: UInt? {
-        let value = frida_application_get_pid(handle)
+        let value = telco_application_get_pid(handle)
         return value != 0 ? UInt(value) : nil
     }
 
     public lazy var parameters: [String: Any] = {
-        var result = Marshal.dictionaryFromParametersDict(frida_application_get_parameters(handle))
+        var result = Marshal.dictionaryFromParametersDict(telco_application_get_parameters(handle))
 
         if let started = result["started"] as? String {
             result["started"] = Marshal.dateFromISO8601(started) ?? NSNull()
@@ -49,9 +49,9 @@ public class ApplicationDetails: NSObject, NSCopying {
 
     public override var description: String {
         if let pid = self.pid {
-            return "Frida.ApplicationDetails(identifier: \"\(identifier)\", name: \"\(name)\", pid: \(pid), parameters: \(parameters))"
+            return "Telco.ApplicationDetails(identifier: \"\(identifier)\", name: \"\(name)\", pid: \(pid), parameters: \(parameters))"
         } else {
-            return "Frida.ApplicationDetails(identifier: \"\(identifier)\", name: \"\(name)\", parameters: \(parameters))"
+            return "Telco.ApplicationDetails(identifier: \"\(identifier)\", name: \"\(name)\", parameters: \(parameters))"
         }
     }
 

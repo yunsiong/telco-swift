@@ -1,7 +1,7 @@
 import XCTest
-@testable import Frida
+@testable import Telco
 
-class FridaTests: XCTestCase {
+class TelcoTests: XCTestCase {
 
     override func setUp() {
         super.setUp()

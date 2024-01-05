@@ -1,6 +1,6 @@
-import CFrida
+import CTelco
 
-@objc(FridaPortalMembership)
+@objc(TelcoPortalMembership)
 public class PortalMembership: NSObject, NSCopying {
     public typealias TerminateComplete = (_ result: TerminateResult) -> Void
     public typealias TerminateResult = () throws -> Bool
@@ -20,13 +20,13 @@ public class PortalMembership: NSObject, NSCopying {
 
     deinit {
         let h = gpointer(handle)
-        Runtime.scheduleOnFridaThread {
+        Runtime.scheduleOnTelcoThread {
             g_object_unref(h)
         }
     }
 
     public override var description: String {
-        return "Frida.PortalMembership()"
+        return "Telco.PortalMembership()"
     }
 
     public override func isEqual(_ object: Any?) -> Bool {
@@ -42,12 +42,12 @@ public class PortalMembership: NSObject, NSCopying {
     }
 
     public func terminate(_ completionHandler: @escaping TerminateComplete = { _ in }) {
-        Runtime.scheduleOnFridaThread {
-            frida_portal_membership_terminate(self.handle, nil, { source, result, data in
+        Runtime.scheduleOnTelcoThread {
+            telco_portal_membership_terminate(self.handle, nil, { source, result, data in
                 let operation = Unmanaged<AsyncOperation<TerminateComplete>>.fromOpaque(data!).takeRetainedValue()
 
                 var rawError: UnsafeMutablePointer<GError>? = nil
-                frida_portal_membership_terminate_finish(OpaquePointer(source), result, &rawError)
+                telco_portal_membership_terminate_finish(OpaquePointer(source), result, &rawError)
                 if let rawError = rawError {
                     let error = Marshal.takeNativeError(rawError)
                     Runtime.scheduleOnMainThread {

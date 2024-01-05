@@ -1,13 +1,13 @@
-# frida-swift
+# telco-swift
 
-Swift bindings for [Frida](https://frida.re).
+Swift bindings for [Telco](https://telco.re).
 
 ## Install
 
-- Build Frida for your Mac, e.g. `make core-macos`
+- Build Telco for your Mac, e.g. `make core-macos`
 - Generate a devkit:
 
-    ./releng/devkit.py frida-core macos-x86_64 ./frida-swift/CFrida/
+    ./releng/devkit.py telco-core macos-x86_64 ./telco-swift/CTelco/
 
 - Open and build with Xcode.
 

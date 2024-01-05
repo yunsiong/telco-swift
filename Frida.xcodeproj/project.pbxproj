@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0C2573901CAD790B0075F77A /* frida-core.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C25738D1CAD790B0075F77A /* frida-core.h */; };
-		0C2573911CAD790B0075F77A /* libfrida-core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C25738E1CAD790B0075F77A /* libfrida-core.a */; };
+		0C2573901CAD790B0075F77A /* telco-core.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C25738D1CAD790B0075F77A /* telco-core.h */; };
+		0C2573911CAD790B0075F77A /* libtelco-core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C25738E1CAD790B0075F77A /* libtelco-core.a */; };
 		0C2573931CAD990A0075F77A /* Device.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2573921CAD990A0075F77A /* Device.swift */; };
 		0C2573951CADA58B0075F77A /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2573941CADA58B0075F77A /* Error.swift */; };
 		0C2573971CADB7C60075F77A /* Runtime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C2573961CADB7C60075F77A /* Runtime.swift */; };
@@ -21,9 +21,9 @@
 		0C3DE4EC1CB1C3F60091AC08 /* DeviceDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3DE4EB1CB1C3F60091AC08 /* DeviceDelegate.swift */; };
 		0C3DE4EE1CB1D3C70091AC08 /* SessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C3DE4ED1CB1D3C70091AC08 /* SessionDelegate.swift */; };
 		0C5A27BD1CA6F127004D820F /* DeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C5A27BC1CA6F127004D820F /* DeviceManager.swift */; };
-		0C9289381CA6F06C00FBA302 /* Frida.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C9289371CA6F06C00FBA302 /* Frida.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		0C92893F1CA6F06C00FBA302 /* Frida.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C9289341CA6F06C00FBA302 /* Frida.framework */; };
-		0C9289441CA6F06C00FBA302 /* FridaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C9289431CA6F06C00FBA302 /* FridaTests.swift */; };
+		0C9289381CA6F06C00FBA302 /* Telco.h in Headers */ = {isa = PBXBuildFile; fileRef = 0C9289371CA6F06C00FBA302 /* Telco.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0C92893F1CA6F06C00FBA302 /* Telco.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C9289341CA6F06C00FBA302 /* Telco.framework */; };
+		0C9289441CA6F06C00FBA302 /* TelcoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C9289431CA6F06C00FBA302 /* TelcoTests.swift */; };
 		0CA4A1301CADF094006A32C4 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CA4A12F1CADF094006A32C4 /* Session.swift */; };
 		0CA4A1321CADF2B1006A32C4 /* Script.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CA4A1311CADF2B1006A32C4 /* Script.swift */; };
 		0CA4A1341CADFAD4006A32C4 /* ScriptDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CA4A1331CADFAD4006A32C4 /* ScriptDelegate.swift */; };
@@ -47,7 +47,7 @@
 			containerPortal = 0C92892B1CA6F06C00FBA302 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 0C9289331CA6F06C00FBA302;
-			remoteInfo = Frida;
+			remoteInfo = Telco;
 		};
 		FA2F63C822C419EB000B1E2C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -71,8 +71,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0C25738D1CAD790B0075F77A /* frida-core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "frida-core.h"; sourceTree = "<group>"; };
-		0C25738E1CAD790B0075F77A /* libfrida-core.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libfrida-core.a"; sourceTree = "<group>"; };
+		0C25738D1CAD790B0075F77A /* telco-core.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "telco-core.h"; sourceTree = "<group>"; };
+		0C25738E1CAD790B0075F77A /* libtelco-core.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libtelco-core.a"; sourceTree = "<group>"; };
 		0C25738F1CAD790B0075F77A /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
 		0C2573921CAD990A0075F77A /* Device.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Device.swift; sourceTree = "<group>"; };
 		0C2573941CADA58B0075F77A /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
@@ -86,11 +86,11 @@
 		0C3DE4EB1CB1C3F60091AC08 /* DeviceDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceDelegate.swift; sourceTree = "<group>"; };
 		0C3DE4ED1CB1D3C70091AC08 /* SessionDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionDelegate.swift; sourceTree = "<group>"; };
 		0C5A27BC1CA6F127004D820F /* DeviceManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceManager.swift; sourceTree = "<group>"; };
-		0C9289341CA6F06C00FBA302 /* Frida.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Frida.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		0C9289371CA6F06C00FBA302 /* Frida.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Frida.h; sourceTree = "<group>"; };
+		0C9289341CA6F06C00FBA302 /* Telco.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Telco.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0C9289371CA6F06C00FBA302 /* Telco.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Telco.h; sourceTree = "<group>"; };
 		0C9289391CA6F06C00FBA302 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		0C92893E1CA6F06C00FBA302 /* FridaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FridaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		0C9289431CA6F06C00FBA302 /* FridaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FridaTests.swift; sourceTree = "<group>"; };
+		0C92893E1CA6F06C00FBA302 /* TelcoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TelcoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		0C9289431CA6F06C00FBA302 /* TelcoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TelcoTests.swift; sourceTree = "<group>"; };
 		0C9289451CA6F06C00FBA302 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0CA4A12F1CADF094006A32C4 /* Session.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		0CA4A1311CADF2B1006A32C4 /* Script.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Script.swift; sourceTree = "<group>"; };
@@ -115,7 +115,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0C2573911CAD790B0075F77A /* libfrida-core.a in Frameworks */,
+				0C2573911CAD790B0075F77A /* libtelco-core.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -123,7 +123,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0C92893F1CA6F06C00FBA302 /* Frida.framework in Frameworks */,
+				0C92893F1CA6F06C00FBA302 /* Telco.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,22 +137,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0C5A27C81CA6FD85004D820F /* CFrida */ = {
+		0C5A27C81CA6FD85004D820F /* CTelco */ = {
 			isa = PBXGroup;
 			children = (
-				0C25738D1CAD790B0075F77A /* frida-core.h */,
-				0C25738E1CAD790B0075F77A /* libfrida-core.a */,
+				0C25738D1CAD790B0075F77A /* telco-core.h */,
+				0C25738E1CAD790B0075F77A /* libtelco-core.a */,
 				0C25738F1CAD790B0075F77A /* module.modulemap */,
 			);
-			path = CFrida;
+			path = CTelco;
 			sourceTree = "<group>";
 		};
 		0C92892A1CA6F06C00FBA302 = {
 			isa = PBXGroup;
 			children = (
-				0C5A27C81CA6FD85004D820F /* CFrida */,
-				0C9289361CA6F06C00FBA302 /* Frida */,
-				0C9289421CA6F06C00FBA302 /* FridaTests */,
+				0C5A27C81CA6FD85004D820F /* CTelco */,
+				0C9289361CA6F06C00FBA302 /* Telco */,
+				0C9289421CA6F06C00FBA302 /* TelcoTests */,
 				FA517E9C22C41380009A9A0E /* TestTarget */,
 				0C9289351CA6F06C00FBA302 /* Products */,
 			);
@@ -161,17 +161,17 @@
 		0C9289351CA6F06C00FBA302 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				0C9289341CA6F06C00FBA302 /* Frida.framework */,
-				0C92893E1CA6F06C00FBA302 /* FridaTests.xctest */,
+				0C9289341CA6F06C00FBA302 /* Telco.framework */,
+				0C92893E1CA6F06C00FBA302 /* TelcoTests.xctest */,
 				FA517E9B22C41380009A9A0E /* TestTarget */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		0C9289361CA6F06C00FBA302 /* Frida */ = {
+		0C9289361CA6F06C00FBA302 /* Telco */ = {
 			isa = PBXGroup;
 			children = (
-				0C9289371CA6F06C00FBA302 /* Frida.h */,
+				0C9289371CA6F06C00FBA302 /* Telco.h */,
 				0C9289391CA6F06C00FBA302 /* Info.plist */,
 				0C5A27BC1CA6F127004D820F /* DeviceManager.swift */,
 				0C3DE4E71CB1A9530091AC08 /* DeviceManagerDelegate.swift */,
@@ -199,17 +199,17 @@
 				FA517E9322C41250009A9A0E /* RpcRequest.swift */,
 				FA517E9522C4129A009A9A0E /* RpcFunction.swift */,
 			);
-			path = Frida;
+			path = Telco;
 			sourceTree = "<group>";
 		};
-		0C9289421CA6F06C00FBA302 /* FridaTests */ = {
+		0C9289421CA6F06C00FBA302 /* TelcoTests */ = {
 			isa = PBXGroup;
 			children = (
-				0C9289431CA6F06C00FBA302 /* FridaTests.swift */,
+				0C9289431CA6F06C00FBA302 /* TelcoTests.swift */,
 				0C9289451CA6F06C00FBA302 /* Info.plist */,
 				FA517EA222C4139F009A9A0E /* MacOsTargetTests.swift */,
 			);
-			path = FridaTests;
+			path = TelcoTests;
 			sourceTree = "<group>";
 		};
 		FA517E9C22C41380009A9A0E /* TestTarget */ = {
@@ -227,17 +227,17 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0C2573901CAD790B0075F77A /* frida-core.h in Headers */,
-				0C9289381CA6F06C00FBA302 /* Frida.h in Headers */,
+				0C2573901CAD790B0075F77A /* telco-core.h in Headers */,
+				0C9289381CA6F06C00FBA302 /* Telco.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		0C9289331CA6F06C00FBA302 /* Frida */ = {
+		0C9289331CA6F06C00FBA302 /* Telco */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 0C9289481CA6F06C00FBA302 /* Build configuration list for PBXNativeTarget "Frida" */;
+			buildConfigurationList = 0C9289481CA6F06C00FBA302 /* Build configuration list for PBXNativeTarget "Telco" */;
 			buildPhases = (
 				0C92892F1CA6F06C00FBA302 /* Sources */,
 				0C9289301CA6F06C00FBA302 /* Frameworks */,
@@ -248,14 +248,14 @@
 			);
 			dependencies = (
 			);
-			name = Frida;
-			productName = Frida;
-			productReference = 0C9289341CA6F06C00FBA302 /* Frida.framework */;
+			name = Telco;
+			productName = Telco;
+			productReference = 0C9289341CA6F06C00FBA302 /* Telco.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		0C92893D1CA6F06C00FBA302 /* FridaTests */ = {
+		0C92893D1CA6F06C00FBA302 /* TelcoTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 0C92894B1CA6F06C00FBA302 /* Build configuration list for PBXNativeTarget "FridaTests" */;
+			buildConfigurationList = 0C92894B1CA6F06C00FBA302 /* Build configuration list for PBXNativeTarget "TelcoTests" */;
 			buildPhases = (
 				0C92893A1CA6F06C00FBA302 /* Sources */,
 				0C92893B1CA6F06C00FBA302 /* Frameworks */,
@@ -267,9 +267,9 @@
 				FA2F63C922C419EB000B1E2C /* PBXTargetDependency */,
 				0C9289411CA6F06C00FBA302 /* PBXTargetDependency */,
 			);
-			name = FridaTests;
-			productName = FridaTests;
-			productReference = 0C92893E1CA6F06C00FBA302 /* FridaTests.xctest */;
+			name = TelcoTests;
+			productName = TelcoTests;
+			productReference = 0C92893E1CA6F06C00FBA302 /* TelcoTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		FA517E9A22C41380009A9A0E /* TestTarget */ = {
@@ -297,7 +297,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 1400;
-				ORGANIZATIONNAME = Frida;
+				ORGANIZATIONNAME = Telco;
 				TargetAttributes = {
 					0C9289331CA6F06C00FBA302 = {
 						CreatedOnToolsVersion = 7.3;
@@ -313,7 +313,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 0C92892E1CA6F06C00FBA302 /* Build configuration list for PBXProject "Frida" */;
+			buildConfigurationList = 0C92892E1CA6F06C00FBA302 /* Build configuration list for PBXProject "Telco" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -326,8 +326,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				0C9289331CA6F06C00FBA302 /* Frida */,
-				0C92893D1CA6F06C00FBA302 /* FridaTests */,
+				0C9289331CA6F06C00FBA302 /* Telco */,
+				0C92893D1CA6F06C00FBA302 /* TelcoTests */,
 				FA517E9A22C41380009A9A0E /* TestTarget */,
 			);
 		};
@@ -388,7 +388,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA517EA322C4139F009A9A0E /* MacOsTargetTests.swift in Sources */,
-				0C9289441CA6F06C00FBA302 /* FridaTests.swift in Sources */,
+				0C9289441CA6F06C00FBA302 /* TelcoTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -405,7 +405,7 @@
 /* Begin PBXTargetDependency section */
 		0C9289411CA6F06C00FBA302 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 0C9289331CA6F06C00FBA302 /* Frida */;
+			target = 0C9289331CA6F06C00FBA302 /* Telco */;
 			targetProxy = 0C9289401CA6F06C00FBA302 /* PBXContainerItemProxy */;
 		};
 		FA2F63C922C419EB000B1E2C /* PBXTargetDependency */ = {
@@ -551,24 +551,24 @@
 				FRAMEWORK_SEARCH_PATHS = "";
 				FRAMEWORK_VERSION = A;
 				HEADER_SEARCH_PATHS = "";
-				INFOPLIST_FILE = Frida/Info.plist;
+				INFOPLIST_FILE = Telco/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					CFrida,
+					CTelco,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-lbsm",
 					"-lresolv",
-					"-Wl,-unexported_symbols_list,CFrida/CFrida.symbols",
+					"-Wl,-unexported_symbols_list,CTelco/CTelco.symbols",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = re.frida.Frida;
+				PRODUCT_BUNDLE_IDENTIFIER = re.telco.Telco;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_INCLUDE_PATHS = CFrida;
+				SWIFT_INCLUDE_PATHS = CTelco;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
@@ -592,24 +592,24 @@
 				FRAMEWORK_SEARCH_PATHS = "";
 				FRAMEWORK_VERSION = A;
 				HEADER_SEARCH_PATHS = "";
-				INFOPLIST_FILE = Frida/Info.plist;
+				INFOPLIST_FILE = Telco/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					CFrida,
+					CTelco,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-lbsm",
 					"-lresolv",
-					"-Wl,-unexported_symbols_list,CFrida/CFrida.symbols",
+					"-Wl,-unexported_symbols_list,CTelco/CTelco.symbols",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = re.frida.Frida;
+				PRODUCT_BUNDLE_IDENTIFIER = re.telco.Telco;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_INCLUDE_PATHS = CFrida;
+				SWIFT_INCLUDE_PATHS = CTelco;
 				SWIFT_INSTALL_OBJC_HEADER = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Osize";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
@@ -622,9 +622,9 @@
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
-				INFOPLIST_FILE = FridaTests/Info.plist;
+				INFOPLIST_FILE = TelcoTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = re.frida.FridaTests;
+				PRODUCT_BUNDLE_IDENTIFIER = re.telco.TelcoTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 			};
@@ -635,9 +635,9 @@
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
-				INFOPLIST_FILE = FridaTests/Info.plist;
+				INFOPLIST_FILE = TelcoTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = re.frida.FridaTests;
+				PRODUCT_BUNDLE_IDENTIFIER = re.telco.TelcoTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 			};
@@ -683,7 +683,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		0C92892E1CA6F06C00FBA302 /* Build configuration list for PBXProject "Frida" */ = {
+		0C92892E1CA6F06C00FBA302 /* Build configuration list for PBXProject "Telco" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0C9289461CA6F06C00FBA302 /* Debug */,
@@ -692,7 +692,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		0C9289481CA6F06C00FBA302 /* Build configuration list for PBXNativeTarget "Frida" */ = {
+		0C9289481CA6F06C00FBA302 /* Build configuration list for PBXNativeTarget "Telco" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0C9289491CA6F06C00FBA302 /* Debug */,
@@ -701,7 +701,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		0C92894B1CA6F06C00FBA302 /* Build configuration list for PBXNativeTarget "FridaTests" */ = {
+		0C92894B1CA6F06C00FBA302 /* Build configuration list for PBXNativeTarget "TelcoTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0C92894C1CA6F06C00FBA302 /* Debug */,

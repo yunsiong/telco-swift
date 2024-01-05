@@ -1,6 +1,6 @@
-import CFrida
+import CTelco
 
-@objc(FridaScript)
+@objc(TelcoScript)
 public class Script: NSObject, NSCopying {
     public weak var delegate: ScriptDelegate?
 
@@ -49,7 +49,7 @@ public class Script: NSObject, NSCopying {
     deinit {
         let rawHandle = gpointer(handle)
         let handlers = [onDestroyedHandler, onMessageHandler]
-        Runtime.scheduleOnFridaThread {
+        Runtime.scheduleOnTelcoThread {
             for handler in handlers {
                 g_signal_handler_disconnect(rawHandle, handler)
             }
@@ -62,7 +62,7 @@ public class Script: NSObject, NSCopying {
     }()
 
     public override var description: String {
-        return "Frida.Script()"
+        return "Telco.Script()"
     }
 
     public override func isEqual(_ object: Any?) -> Bool {
@@ -78,12 +78,12 @@ public class Script: NSObject, NSCopying {
     }
 
     public func load(_ completionHandler: @escaping LoadComplete = { _ in }) {
-        Runtime.scheduleOnFridaThread {
-            frida_script_load(self.handle, nil, { source, result, data in
+        Runtime.scheduleOnTelcoThread {
+            telco_script_load(self.handle, nil, { source, result, data in
                 let operation = Unmanaged<AsyncOperation<LoadComplete>>.fromOpaque(data!).takeRetainedValue()
 
                 var rawError: UnsafeMutablePointer<GError>? = nil
-                frida_script_load_finish(OpaquePointer(source), result, &rawError)
+                telco_script_load_finish(OpaquePointer(source), result, &rawError)
                 if let rawError = rawError {
                     let error = Marshal.takeNativeError(rawError)
                     Runtime.scheduleOnMainThread {
@@ -100,12 +100,12 @@ public class Script: NSObject, NSCopying {
     }
 
     public func unload(_ completionHandler: @escaping UnloadComplete = { _ in }) {
-        Runtime.scheduleOnFridaThread {
-            frida_script_unload(self.handle, nil, { source, result, data in
+        Runtime.scheduleOnTelcoThread {
+            telco_script_unload(self.handle, nil, { source, result, data in
                 let operation = Unmanaged<AsyncOperation<UnloadComplete>>.fromOpaque(data!).takeRetainedValue()
 
                 var rawError: UnsafeMutablePointer<GError>? = nil
-                frida_script_unload_finish(OpaquePointer(source), result, &rawError)
+                telco_script_unload_finish(OpaquePointer(source), result, &rawError)
                 if let rawError = rawError {
                     let error = Marshal.takeNativeError(rawError)
                     Runtime.scheduleOnMainThread {
@@ -122,12 +122,12 @@ public class Script: NSObject, NSCopying {
     }
 
     public func eternalize(_ completionHandler: @escaping EternalizeComplete = { _ in }) {
-        Runtime.scheduleOnFridaThread {
-            frida_script_eternalize(self.handle, nil, { source, result, data in
+        Runtime.scheduleOnTelcoThread {
+            telco_script_eternalize(self.handle, nil, { source, result, data in
                 let operation = Unmanaged<AsyncOperation<EternalizeComplete>>.fromOpaque(data!).takeRetainedValue()
 
                 var rawError: UnsafeMutablePointer<GError>? = nil
-                frida_script_eternalize_finish(OpaquePointer(source), result, &rawError)
+                telco_script_eternalize_finish(OpaquePointer(source), result, &rawError)
                 if let rawError = rawError {
                     let error = Marshal.takeNativeError(rawError)
                     Runtime.scheduleOnMainThread {
@@ -149,18 +149,18 @@ public class Script: NSObject, NSCopying {
 
         let rawData = Marshal.bytesFromData(data)
 
-        frida_script_post(handle, json, rawData)
+        telco_script_post(handle, json, rawData)
 
         g_bytes_unref(rawData)
     }
 
     public func enableDebugger(_ port: UInt16 = 0, completionHandler: @escaping EnableDebuggerComplete = { _ in }) {
-        Runtime.scheduleOnFridaThread {
-            frida_script_enable_debugger(self.handle, port, nil, { source, result, data in
+        Runtime.scheduleOnTelcoThread {
+            telco_script_enable_debugger(self.handle, port, nil, { source, result, data in
                 let operation = Unmanaged<AsyncOperation<EnableDebuggerComplete>>.fromOpaque(data!).takeRetainedValue()
 
                 var rawError: UnsafeMutablePointer<GError>? = nil
-                frida_script_enable_debugger_finish(OpaquePointer(source), result, &rawError)
+                telco_script_enable_debugger_finish(OpaquePointer(source), result, &rawError)
                 if let rawError = rawError {
                     let error = Marshal.takeNativeError(rawError)
                     Runtime.scheduleOnMainThread {
@@ -177,12 +177,12 @@ public class Script: NSObject, NSCopying {
     }
 
     public func disableDebugger(_ completionHandler: @escaping DisableDebuggerComplete = { _ in }) {
-        Runtime.scheduleOnFridaThread {
-            frida_script_disable_debugger(self.handle, nil, { source, result, data in
+        Runtime.scheduleOnTelcoThread {
+            telco_script_disable_debugger(self.handle, nil, { source, result, data in
                 let operation = Unmanaged<AsyncOperation<DisableDebuggerComplete>>.fromOpaque(data!).takeRetainedValue()
 
                 var rawError: UnsafeMutablePointer<GError>? = nil
-                frida_script_disable_debugger_finish(OpaquePointer(source), result, &rawError)
+                telco_script_disable_debugger_finish(OpaquePointer(source), result, &rawError)
                 if let rawError = rawError {
                     let error = Marshal.takeNativeError(rawError)
                     Runtime.scheduleOnMainThread {
@@ -218,10 +218,10 @@ public class Script: NSObject, NSCopying {
 
         let decoder = JSONDecoder()
         do {
-            let rpcMessage = try decoder.decode(FridaRpcMessage.self, from: json)
+            let rpcMessage = try decoder.decode(TelcoRpcMessage.self, from: json)
             let script = connection.instance!
             let messageDict = message as! [String: Any]
-            let payload = messageDict[FridaRpcMessage.CodingKeys.payload.rawValue] as! [Any]
+            let payload = messageDict[TelcoRpcMessage.CodingKeys.payload.rawValue] as! [Any]
             let callback = script.rpcCallbacks[rpcMessage.payload.requestId]!
 
             if rpcMessage.payload.status == .ok {
@@ -289,9 +289,9 @@ public class Script: NSObject, NSCopying {
 
     internal func rpcPost(functionName: String, requestId: Int, values: [Any]) -> RpcRequest {
         let message: [Any] = [
-            String(describing: FridaRpcKind.default),
+            String(describing: TelcoRpcKind.default),
             requestId,
-            String(describing: FridaRpcOperation.call),
+            String(describing: TelcoRpcOperation.call),
             functionName,
             values
         ]
@@ -308,23 +308,23 @@ public class Script: NSObject, NSCopying {
 
     // MARK: - Private Types
 
-    private enum FridaMessageType: String, Decodable {
+    private enum TelcoMessageType: String, Decodable {
         case error
         case log
         case send
     }
 
-    private enum FridaRpcKind: String, Decodable, CustomStringConvertible {
-        case `default` = "frida:rpc"
+    private enum TelcoRpcKind: String, Decodable, CustomStringConvertible {
+        case `default` = "telco:rpc"
 
         var description: String {
             return rawValue
         }
     }
 
-    private struct FridaRpcMessage: Decodable {
-        let type: FridaMessageType
-        let payload: FridaRpcPayload
+    private struct TelcoRpcMessage: Decodable {
+        let type: TelcoMessageType
+        let payload: TelcoRpcPayload
 
         enum CodingKeys: String, CodingKey {
             case type
@@ -332,12 +332,12 @@ public class Script: NSObject, NSCopying {
         }
     }
 
-    private enum FridaRpcStatus: String, Decodable {
+    private enum TelcoRpcStatus: String, Decodable {
         case ok
         case error
     }
 
-    private enum FridaRpcOperation: String, CustomStringConvertible {
+    private enum TelcoRpcOperation: String, CustomStringConvertible {
         case call
 
         var description: String {
@@ -345,16 +345,16 @@ public class Script: NSObject, NSCopying {
         }
     }
 
-    private struct FridaRpcPayload: Decodable {
-        let kind: FridaRpcKind
+    private struct TelcoRpcPayload: Decodable {
+        let kind: TelcoRpcKind
         let requestId: Int
-        let status: FridaRpcStatus
+        let status: TelcoRpcStatus
 
         init(from decoder: Decoder) throws{
             var container = try decoder.unkeyedContainer()
-            kind = try container.decode(FridaRpcKind.self)
+            kind = try container.decode(TelcoRpcKind.self)
             requestId = try container.decode(Int.self)
-            status = try container.decode(FridaRpcStatus.self)
+            status = try container.decode(TelcoRpcStatus.self)
         }
     }
 }

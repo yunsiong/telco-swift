@@ -1,11 +1,11 @@
-import CFrida
+import CTelco
 
-@objc(FridaRelay)
+@objc(TelcoRelay)
 public class Relay: NSObject {
     internal let handle: OpaquePointer
 
     init(address: String, username: String, password: String, kind: RelayKind) {
-        self.handle = frida_relay_new(address, username, password, FridaRelayKind(kind.rawValue))
+        self.handle = telco_relay_new(address, username, password, TelcoRelayKind(kind.rawValue))
 
         super.init()
     }
@@ -26,23 +26,23 @@ public class Relay: NSObject {
     }
 
     public var address: String {
-        return String(cString: frida_relay_get_address(handle))
+        return String(cString: telco_relay_get_address(handle))
     }
 
     public var username: String {
-        return String(cString: frida_relay_get_username(handle))
+        return String(cString: telco_relay_get_username(handle))
     }
 
     public var password: String {
-        return String(cString: frida_relay_get_password(handle))
+        return String(cString: telco_relay_get_password(handle))
     }
 
     public var kind: RelayKind {
-        return RelayKind(rawValue: frida_relay_get_kind(handle).rawValue)!
+        return RelayKind(rawValue: telco_relay_get_kind(handle).rawValue)!
     }
 
     public override var description: String {
-        return "Frida.Relay(address: \"\(address)\", username: \"\(username)\", password: \"\(password)\", kind: \(kind))"
+        return "Telco.Relay(address: \"\(address)\", username: \"\(username)\", password: \"\(password)\", kind: \(kind))"
     }
 
     public override func isEqual(_ object: Any?) -> Bool {
@@ -58,7 +58,7 @@ public class Relay: NSObject {
     }
 }
 
-@objc(FridaRelayKind)
+@objc(TelcoRelayKind)
 public enum RelayKind: UInt32, CustomStringConvertible {
     case turnUdp
     case turnTcp

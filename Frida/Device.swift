@@ -1,6 +1,6 @@
-import CFrida
+import CTelco
 
-@objc(FridaDevice)
+@objc(TelcoDevice)
 public class Device: NSObject, NSCopying {
     public weak var delegate: DeviceDelegate?
 
@@ -119,7 +119,7 @@ public class Device: NSObject, NSCopying {
         let rawHandle = gpointer(handle)
         let handlers = [onSpawnAddedHandler, onSpawnRemovedHandler, onChildAddedHandler, onChildRemovedHandler, onProcessCrashedHandler,
                         onOutputHandler, onUninjectedHandler, onLostHandler]
-        Runtime.scheduleOnFridaThread {
+        Runtime.scheduleOnTelcoThread {
             for handler in handlers {
                 g_signal_handler_disconnect(rawHandle, handler)
             }
@@ -128,15 +128,15 @@ public class Device: NSObject, NSCopying {
     }
 
     public var id: String {
-        return String(cString: frida_device_get_id(handle))
+        return String(cString: telco_device_get_id(handle))
     }
 
     public var name: String {
-        return String(cString: frida_device_get_name(handle))
+        return String(cString: telco_device_get_name(handle))
     }
 
     public lazy var icon: NSImage? = {
-        guard let iconVariant = frida_device_get_icon(handle) else {
+        guard let iconVariant = telco_device_get_icon(handle) else {
             return nil
         }
         let iconDict = Marshal.valueFromVariant(iconVariant) as! [String: Any];
@@ -144,30 +144,30 @@ public class Device: NSObject, NSCopying {
     }()
 
     public var kind: Kind {
-        switch frida_device_get_dtype(handle) {
-        case FRIDA_DEVICE_TYPE_LOCAL:
+        switch telco_device_get_dtype(handle) {
+        case TELCO_DEVICE_TYPE_LOCAL:
             return Kind.local
-        case FRIDA_DEVICE_TYPE_REMOTE:
+        case TELCO_DEVICE_TYPE_REMOTE:
             return Kind.remote
-        case FRIDA_DEVICE_TYPE_USB:
+        case TELCO_DEVICE_TYPE_USB:
             return Kind.usb
         default:
-            fatalError("Unexpected Frida Device kind")
+            fatalError("Unexpected Telco Device kind")
         }
     }
 
     public lazy var bus: Bus = {
-        let busHandle = frida_device_get_bus(handle)!
+        let busHandle = telco_device_get_bus(handle)!
         g_object_ref(gpointer(busHandle))
         return Bus(handle: busHandle)
     }()
 
     public var isLost: Bool {
-        return frida_device_is_lost(handle) != 0
+        return telco_device_is_lost(handle) != 0
     }
 
     public override var description: String {
-        return "Frida.Device(id: \"\(id)\", name: \"\(name)\", kind: \"\(kind)\")"
+        return "Telco.Device(id: \"\(id)\", name: \"\(name)\", kind: \"\(kind)\")"
     }
 
     public override func isEqual(_ object: Any?) -> Bool {
@@ -183,12 +183,12 @@ public class Device: NSObject, NSCopying {
     }
 
     public func querySystemParameters(_ completionHandler: @escaping QuerySystemParametersComplete) {
-        Runtime.scheduleOnFridaThread {
-            frida_device_query_system_parameters(self.handle, nil, { source, result, data in
+        Runtime.scheduleOnTelcoThread {
+            telco_device_query_system_parameters(self.handle, nil, { source, result, data in
                 let operation = Unmanaged<AsyncOperation<QuerySystemParametersComplete>>.fromOpaque(data!).takeRetainedValue()
 
                 var rawError: UnsafeMutablePointer<GError>? = nil
-                let rawParameters = frida_device_query_system_parameters_finish(OpaquePointer(source), result, &rawError)
+                let rawParameters = telco_device_query_system_parameters_finish(OpaquePointer(source), result, &rawError)
                 if let rawError = rawError {
                     let error = Marshal.takeNativeError(rawError)
                     Runtime.scheduleOnMainThread {
@@ -209,21 +209,21 @@ public class Device: NSObject, NSCopying {
     }
 
     public func getFrontmostApplication(scope: Scope? = nil, _ completionHandler: @escaping GetFrontmostApplicationComplete) {
-        Runtime.scheduleOnFridaThread {
-            let options = frida_frontmost_query_options_new()
+        Runtime.scheduleOnTelcoThread {
+            let options = telco_frontmost_query_options_new()
             defer {
                 g_object_unref(gpointer(options))
             }
 
             if let scope = scope {
-                frida_frontmost_query_options_set_scope(options, FridaScope(scope.rawValue))
+                telco_frontmost_query_options_set_scope(options, TelcoScope(scope.rawValue))
             }
 
-            frida_device_get_frontmost_application(self.handle, options, nil, { source, result, data in
+            telco_device_get_frontmost_application(self.handle, options, nil, { source, result, data in
                 let operation = Unmanaged<AsyncOperation<GetFrontmostApplicationComplete>>.fromOpaque(data!).takeRetainedValue()
 
                 var rawError: UnsafeMutablePointer<GError>? = nil
-                let rawApplication = frida_device_get_frontmost_application_finish(OpaquePointer(source), result, &rawError)
+                let rawApplication = telco_device_get_frontmost_application_finish(OpaquePointer(source), result, &rawError)
                 if let rawError = rawError {
                     let error = Marshal.takeNativeError(rawError)
                     Runtime.scheduleOnMainThread {
@@ -242,25 +242,25 @@ public class Device: NSObject, NSCopying {
     }
 
     public func enumerateApplications(identifiers: [String]? = nil, scope: Scope? = nil, _ completionHandler: @escaping EnumerateApplicationsComplete) {
-        Runtime.scheduleOnFridaThread {
-            let options = frida_application_query_options_new()
+        Runtime.scheduleOnTelcoThread {
+            let options = telco_application_query_options_new()
             defer {
                 g_object_unref(gpointer(options))
             }
 
             for identifier in identifiers ?? [] {
-                frida_application_query_options_select_identifier(options, identifier)
+                telco_application_query_options_select_identifier(options, identifier)
             }
 
             if let scope = scope {
-                frida_application_query_options_set_scope(options, FridaScope(scope.rawValue))
+                telco_application_query_options_set_scope(options, TelcoScope(scope.rawValue))
             }
 
-            frida_device_enumerate_applications(self.handle, options, nil, { source, result, data in
+            telco_device_enumerate_applications(self.handle, options, nil, { source, result, data in
                 let operation = Unmanaged<AsyncOperation<EnumerateApplicationsComplete>>.fromOpaque(data!).takeRetainedValue()
 
                 var rawError: UnsafeMutablePointer<GError>? = nil
-                let rawApplications = frida_device_enumerate_applications_finish(OpaquePointer(source), result, &rawError)
+                let rawApplications = telco_device_enumerate_applications_finish(OpaquePointer(source), result, &rawError)
                 if let rawError = rawError {
                     let error = Marshal.takeNativeError(rawError)
                     Runtime.scheduleOnMainThread {
@@ -270,9 +270,9 @@ public class Device: NSObject, NSCopying {
                 }
 
                 var applications: [ApplicationDetails] = []
-                let n = frida_application_list_size(rawApplications)
+                let n = telco_application_list_size(rawApplications)
                 for i in 0..<n {
-                    let application = ApplicationDetails(handle: frida_application_list_get(rawApplications, i))
+                    let application = ApplicationDetails(handle: telco_application_list_get(rawApplications, i))
                     applications.append(application)
                 }
                 g_object_unref(gpointer(rawApplications))
@@ -285,25 +285,25 @@ public class Device: NSObject, NSCopying {
     }
 
     public func enumerateProcesses(pids: [UInt]? = nil, scope: Scope? = nil, _ completionHandler: @escaping EnumerateProcessesComplete) {
-        Runtime.scheduleOnFridaThread {
-            let options = frida_process_query_options_new()
+        Runtime.scheduleOnTelcoThread {
+            let options = telco_process_query_options_new()
             defer {
                 g_object_unref(gpointer(options))
             }
 
             for pid in pids ?? [] {
-                frida_process_query_options_select_pid(options, guint(pid))
+                telco_process_query_options_select_pid(options, guint(pid))
             }
 
             if let scope = scope {
-                frida_process_query_options_set_scope(options, FridaScope(scope.rawValue))
+                telco_process_query_options_set_scope(options, TelcoScope(scope.rawValue))
             }
 
-            frida_device_enumerate_processes(self.handle, options, nil, { source, result, data in
+            telco_device_enumerate_processes(self.handle, options, nil, { source, result, data in
                 let operation = Unmanaged<AsyncOperation<EnumerateProcessesComplete>>.fromOpaque(data!).takeRetainedValue()
 
                 var rawError: UnsafeMutablePointer<GError>? = nil
-                let rawProcesses = frida_device_enumerate_processes_finish(OpaquePointer(source), result, &rawError)
+                let rawProcesses = telco_device_enumerate_processes_finish(OpaquePointer(source), result, &rawError)
                 if let rawError = rawError {
                     let error = Marshal.takeNativeError(rawError)
                     Runtime.scheduleOnMainThread {
@@ -313,9 +313,9 @@ public class Device: NSObject, NSCopying {
                 }
 
                 var processes: [ProcessDetails] = []
-                let n = frida_process_list_size(rawProcesses)
+                let n = telco_process_list_size(rawProcesses)
                 for i in 0..<n {
-                    let process = ProcessDetails(handle: frida_process_list_get(rawProcesses, i))
+                    let process = ProcessDetails(handle: telco_process_list_get(rawProcesses, i))
                     processes.append(process)
                 }
                 g_object_unref(gpointer(rawProcesses))
@@ -328,12 +328,12 @@ public class Device: NSObject, NSCopying {
     }
 
     public func enableSpawnGating(_ completionHandler: @escaping EnableSpawnGatingComplete = { _ in }) {
-        Runtime.scheduleOnFridaThread {
-            frida_device_enable_spawn_gating(self.handle, nil, { source, result, data in
+        Runtime.scheduleOnTelcoThread {
+            telco_device_enable_spawn_gating(self.handle, nil, { source, result, data in
                 let operation = Unmanaged<AsyncOperation<EnableSpawnGatingComplete>>.fromOpaque(data!).takeRetainedValue()
 
                 var rawError: UnsafeMutablePointer<GError>? = nil
-                frida_device_enable_spawn_gating_finish(OpaquePointer(source), result, &rawError)
+                telco_device_enable_spawn_gating_finish(OpaquePointer(source), result, &rawError)
                 if let rawError = rawError {
                     let error = Marshal.takeNativeError(rawError)
                     Runtime.scheduleOnMainThread {
@@ -350,12 +350,12 @@ public class Device: NSObject, NSCopying {
     }
 
     public func disableSpawnGating(_ completionHandler: @escaping DisableSpawnGatingComplete = { _ in }) {
-        Runtime.scheduleOnFridaThread {
-            frida_device_disable_spawn_gating(self.handle, nil, { source, result, data in
+        Runtime.scheduleOnTelcoThread {
+            telco_device_disable_spawn_gating(self.handle, nil, { source, result, data in
                 let operation = Unmanaged<AsyncOperation<DisableSpawnGatingComplete>>.fromOpaque(data!).takeRetainedValue()
 
                 var rawError: UnsafeMutablePointer<GError>? = nil
-                frida_device_disable_spawn_gating_finish(OpaquePointer(source), result, &rawError)
+                telco_device_disable_spawn_gating_finish(OpaquePointer(source), result, &rawError)
                 if let rawError = rawError {
                     let error = Marshal.takeNativeError(rawError)
                     Runtime.scheduleOnMainThread {
@@ -372,12 +372,12 @@ public class Device: NSObject, NSCopying {
     }
 
     public func enumeratePendingSpawn(_ completionHandler: @escaping EnumeratePendingSpawnComplete) {
-        Runtime.scheduleOnFridaThread {
-            frida_device_enumerate_pending_spawn(self.handle, nil, { source, result, data in
+        Runtime.scheduleOnTelcoThread {
+            telco_device_enumerate_pending_spawn(self.handle, nil, { source, result, data in
                 let operation = Unmanaged<AsyncOperation<EnumeratePendingSpawnComplete>>.fromOpaque(data!).takeRetainedValue()
 
                 var rawError: UnsafeMutablePointer<GError>? = nil
-                let rawSpawn = frida_device_enumerate_pending_spawn_finish(OpaquePointer(source), result, &rawError)
+                let rawSpawn = telco_device_enumerate_pending_spawn_finish(OpaquePointer(source), result, &rawError)
                 if let rawError = rawError {
                     let error = Marshal.takeNativeError(rawError)
                     Runtime.scheduleOnMainThread {
@@ -387,9 +387,9 @@ public class Device: NSObject, NSCopying {
                 }
 
                 var spawn: [SpawnDetails] = []
-                let n = frida_spawn_list_size(rawSpawn)
+                let n = telco_spawn_list_size(rawSpawn)
                 for i in 0..<n {
-                    let details = SpawnDetails(handle: frida_spawn_list_get(rawSpawn, i))
+                    let details = SpawnDetails(handle: telco_spawn_list_get(rawSpawn, i))
                     spawn.append(details)
                 }
                 g_object_unref(gpointer(rawSpawn))
@@ -402,12 +402,12 @@ public class Device: NSObject, NSCopying {
     }
 
     public func enumeratePendingChildren(_ completionHandler: @escaping EnumeratePendingChildrenComplete) {
-        Runtime.scheduleOnFridaThread {
-            frida_device_enumerate_pending_children(self.handle, nil, { source, result, data in
+        Runtime.scheduleOnTelcoThread {
+            telco_device_enumerate_pending_children(self.handle, nil, { source, result, data in
                 let operation = Unmanaged<AsyncOperation<EnumeratePendingChildrenComplete>>.fromOpaque(data!).takeRetainedValue()
 
                 var rawError: UnsafeMutablePointer<GError>? = nil
-                let rawChildren = frida_device_enumerate_pending_children_finish(OpaquePointer(source), result, &rawError)
+                let rawChildren = telco_device_enumerate_pending_children_finish(OpaquePointer(source), result, &rawError)
                 if let rawError = rawError {
                     let error = Marshal.takeNativeError(rawError)
                     Runtime.scheduleOnMainThread {
@@ -417,9 +417,9 @@ public class Device: NSObject, NSCopying {
                 }
 
                 var children: [ChildDetails] = []
-                let n = frida_child_list_size(rawChildren)
+                let n = telco_child_list_size(rawChildren)
                 for i in 0..<n {
-                    let details = ChildDetails(handle: frida_child_list_get(rawChildren, i))
+                    let details = ChildDetails(handle: telco_child_list_get(rawChildren, i))
                     children.append(details)
                 }
                 g_object_unref(gpointer(rawChildren))
@@ -433,43 +433,43 @@ public class Device: NSObject, NSCopying {
 
     public func spawn(_ program: String, argv: [String]? = nil, envp: [String: String]? = nil, env: [String: String]? = nil,
                       cwd: String? = nil, stdio: Stdio? = nil, completionHandler: @escaping SpawnComplete) {
-        Runtime.scheduleOnFridaThread {
-            let options = frida_spawn_options_new()
+        Runtime.scheduleOnTelcoThread {
+            let options = telco_spawn_options_new()
             defer {
                 g_object_unref(gpointer(options))
             }
 
             let (rawArgv, argvLength) = Marshal.strvFromArray(argv)
             if let rawArgv = rawArgv {
-                frida_spawn_options_set_argv(options, rawArgv, argvLength)
+                telco_spawn_options_set_argv(options, rawArgv, argvLength)
                 g_strfreev(rawArgv)
             }
 
             let (rawEnvp, envpLength) = Marshal.envpFromDictionary(envp)
             if let rawEnvp = rawEnvp {
-                frida_spawn_options_set_envp(options, rawEnvp, envpLength)
+                telco_spawn_options_set_envp(options, rawEnvp, envpLength)
                 g_strfreev(rawEnvp)
             }
 
             let (rawEnv, envLength) = Marshal.envpFromDictionary(env)
             if let rawEnv = rawEnv {
-                frida_spawn_options_set_env(options, rawEnv, envLength)
+                telco_spawn_options_set_env(options, rawEnv, envLength)
                 g_strfreev(rawEnv)
             }
 
             if let cwd = cwd {
-                frida_spawn_options_set_cwd(options, cwd)
+                telco_spawn_options_set_cwd(options, cwd)
             }
 
             if let stdio = stdio {
-                frida_spawn_options_set_stdio(options, FridaStdio(stdio.rawValue))
+                telco_spawn_options_set_stdio(options, TelcoStdio(stdio.rawValue))
             }
 
-            frida_device_spawn(self.handle, program, options, nil, { source, result, data in
+            telco_device_spawn(self.handle, program, options, nil, { source, result, data in
                 let operation = Unmanaged<AsyncOperation<SpawnComplete>>.fromOpaque(data!).takeRetainedValue()
 
                 var rawError: UnsafeMutablePointer<GError>? = nil
-                let pid = frida_device_spawn_finish(OpaquePointer(source), result, &rawError)
+                let pid = telco_device_spawn_finish(OpaquePointer(source), result, &rawError)
                 if let rawError = rawError {
                     let error = Marshal.takeNativeError(rawError)
                     Runtime.scheduleOnMainThread {
@@ -486,13 +486,13 @@ public class Device: NSObject, NSCopying {
     }
 
     public func input(_ pid: UInt, data: Data, completionHandler: @escaping InputComplete = { _ in }) {
-        Runtime.scheduleOnFridaThread {
+        Runtime.scheduleOnTelcoThread {
             let rawData = Marshal.bytesFromData(data)
-            frida_device_input(self.handle, guint(pid), rawData, nil, { source, result, data in
+            telco_device_input(self.handle, guint(pid), rawData, nil, { source, result, data in
                 let operation = Unmanaged<AsyncOperation<InputComplete>>.fromOpaque(data!).takeRetainedValue()
 
                 var rawError: UnsafeMutablePointer<GError>? = nil
-                frida_device_input_finish(OpaquePointer(source), result, &rawError)
+                telco_device_input_finish(OpaquePointer(source), result, &rawError)
                 if let rawError = rawError {
                     let error = Marshal.takeNativeError(rawError)
                     Runtime.scheduleOnMainThread {
@@ -510,12 +510,12 @@ public class Device: NSObject, NSCopying {
     }
 
     public func resume(_ pid: UInt, completionHandler: @escaping ResumeComplete = { _ in }) {
-        Runtime.scheduleOnFridaThread {
-            frida_device_resume(self.handle, guint(pid), nil, { source, result, data in
+        Runtime.scheduleOnTelcoThread {
+            telco_device_resume(self.handle, guint(pid), nil, { source, result, data in
                 let operation = Unmanaged<AsyncOperation<ResumeComplete>>.fromOpaque(data!).takeRetainedValue()
 
                 var rawError: UnsafeMutablePointer<GError>? = nil
-                frida_device_resume_finish(OpaquePointer(source), result, &rawError)
+                telco_device_resume_finish(OpaquePointer(source), result, &rawError)
                 if let rawError = rawError {
                     let error = Marshal.takeNativeError(rawError)
                     Runtime.scheduleOnMainThread {
@@ -532,12 +532,12 @@ public class Device: NSObject, NSCopying {
     }
 
     public func kill(_ pid: UInt, completionHandler: @escaping KillComplete = { _ in }) {
-        Runtime.scheduleOnFridaThread {
-            frida_device_kill(self.handle, guint(pid), nil, { source, result, data in
+        Runtime.scheduleOnTelcoThread {
+            telco_device_kill(self.handle, guint(pid), nil, { source, result, data in
                 let operation = Unmanaged<AsyncOperation<KillComplete>>.fromOpaque(data!).takeRetainedValue()
 
                 var rawError: UnsafeMutablePointer<GError>? = nil
-                frida_device_kill_finish(OpaquePointer(source), result, &rawError)
+                telco_device_kill_finish(OpaquePointer(source), result, &rawError)
                 if let rawError = rawError {
                     let error = Marshal.takeNativeError(rawError)
                     Runtime.scheduleOnMainThread {
@@ -554,25 +554,25 @@ public class Device: NSObject, NSCopying {
     }
 
     public func attach(to pid: UInt, realm: Realm? = nil, persistTimeout: UInt? = nil, completionHandler: @escaping AttachComplete) {
-        Runtime.scheduleOnFridaThread {
-            let options = frida_session_options_new()
+        Runtime.scheduleOnTelcoThread {
+            let options = telco_session_options_new()
             defer {
                 g_object_unref(gpointer(options))
             }
 
             if let realm = realm {
-                frida_session_options_set_realm(options, FridaRealm(realm.rawValue))
+                telco_session_options_set_realm(options, TelcoRealm(realm.rawValue))
             }
 
             if let persistTimeout = persistTimeout {
-                frida_session_options_set_persist_timeout(options, guint(persistTimeout))
+                telco_session_options_set_persist_timeout(options, guint(persistTimeout))
             }
 
-            frida_device_attach(self.handle, guint(pid), options, nil, { source, result, data in
+            telco_device_attach(self.handle, guint(pid), options, nil, { source, result, data in
                 let operation = Unmanaged<AsyncOperation<AttachComplete>>.fromOpaque(data!).takeRetainedValue()
 
                 var rawError: UnsafeMutablePointer<GError>? = nil
-                let rawSession = frida_device_attach_finish(OpaquePointer(source), result, &rawError)
+                let rawSession = telco_device_attach_finish(OpaquePointer(source), result, &rawError)
                 if let rawError = rawError {
                     let error = Marshal.takeNativeError(rawError)
                     Runtime.scheduleOnMainThread {
@@ -591,12 +591,12 @@ public class Device: NSObject, NSCopying {
     }
 
     public func injectLibraryFileFile(into pid: UInt, path: String, entrypoint: String, data: String, completionHandler: @escaping InjectLibraryFileComplete) {
-        Runtime.scheduleOnFridaThread {
-            frida_device_inject_library_file(self.handle, guint(pid), path, entrypoint, data, nil, { source, result, data in
+        Runtime.scheduleOnTelcoThread {
+            telco_device_inject_library_file(self.handle, guint(pid), path, entrypoint, data, nil, { source, result, data in
                 let operation = Unmanaged<AsyncOperation<InjectLibraryFileComplete>>.fromOpaque(data!).takeRetainedValue()
 
                 var rawError: UnsafeMutablePointer<GError>? = nil
-                let rawId = frida_device_inject_library_file_finish(OpaquePointer(source), result, &rawError)
+                let rawId = telco_device_inject_library_file_finish(OpaquePointer(source), result, &rawError)
                 if let rawError = rawError {
                     let error = Marshal.takeNativeError(rawError)
                     Runtime.scheduleOnMainThread {
@@ -615,13 +615,13 @@ public class Device: NSObject, NSCopying {
     }
 
     public func injectLibraryBlobBlob(into pid: UInt, blob: Data, entrypoint: String, data: String, completionHandler: @escaping InjectLibraryBlobComplete) {
-        Runtime.scheduleOnFridaThread {
+        Runtime.scheduleOnTelcoThread {
             let rawBlob = Marshal.bytesFromData(blob)
-            frida_device_inject_library_blob(self.handle, guint(pid), rawBlob, entrypoint, data, nil, { source, result, data in
+            telco_device_inject_library_blob(self.handle, guint(pid), rawBlob, entrypoint, data, nil, { source, result, data in
                 let operation = Unmanaged<AsyncOperation<InjectLibraryBlobComplete>>.fromOpaque(data!).takeRetainedValue()
 
                 var rawError: UnsafeMutablePointer<GError>? = nil
-                let rawId = frida_device_inject_library_blob_finish(OpaquePointer(source), result, &rawError)
+                let rawId = telco_device_inject_library_blob_finish(OpaquePointer(source), result, &rawError)
                 if let rawError = rawError {
                     let error = Marshal.takeNativeError(rawError)
                     Runtime.scheduleOnMainThread {
@@ -641,12 +641,12 @@ public class Device: NSObject, NSCopying {
     }
 
     public func openChannel(_ address: String, completionHandler: @escaping OpenChannelComplete) {
-        Runtime.scheduleOnFridaThread {
-            frida_device_open_channel(self.handle, address, nil, { source, result, data in
+        Runtime.scheduleOnTelcoThread {
+            telco_device_open_channel(self.handle, address, nil, { source, result, data in
                 let operation = Unmanaged<AsyncOperation<OpenChannelComplete>>.fromOpaque(data!).takeRetainedValue()
 
                 var rawError: UnsafeMutablePointer<GError>? = nil
-                let rawStream = frida_device_open_channel_finish(OpaquePointer(source), result, &rawError)
+                let rawStream = telco_device_open_channel_finish(OpaquePointer(source), result, &rawError)
                 if let rawError = rawError {
                     let error = Marshal.takeNativeError(rawError)
                     Runtime.scheduleOnMainThread {
@@ -766,7 +766,7 @@ public class Device: NSObject, NSCopying {
     }
 }
 
-@objc(FridaScope)
+@objc(TelcoScope)
 public enum Scope: UInt32, CustomStringConvertible {
     case minimal
     case metadata
@@ -781,7 +781,7 @@ public enum Scope: UInt32, CustomStringConvertible {
     }
 }
 
-@objc(FridaStdio)
+@objc(TelcoStdio)
 public enum Stdio: UInt32, CustomStringConvertible {
     case inherit
     case pipe
@@ -794,7 +794,7 @@ public enum Stdio: UInt32, CustomStringConvertible {
     }
 }
 
-@objc(FridaRealm)
+@objc(TelcoRealm)
 public enum Realm: UInt32, CustomStringConvertible {
     case native
     case emulated

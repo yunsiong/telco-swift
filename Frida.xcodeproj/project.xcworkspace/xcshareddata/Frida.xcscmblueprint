@@ -9,20 +9,20 @@
   },
   "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "D9924641-D916-4A17-8BA1-95BDCA30380E",
   "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
-    "BAAD054289A41FFAA05F61B531C5D333B7F21677" : "frida-swift\/",
+    "BAAD054289A41FFAA05F61B531C5D333B7F21677" : "telco-swift\/",
     "57A979E21A09B3FE5E248080AD6BD8299263F759" : ""
   },
-  "DVTSourceControlWorkspaceBlueprintNameKey" : "Frida",
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "Telco",
   "DVTSourceControlWorkspaceBlueprintVersion" : 204,
-  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Frida.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Telco.xcodeproj",
   "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
     {
-      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:frida\/frida.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:telco\/telco.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "57A979E21A09B3FE5E248080AD6BD8299263F759"
     },
     {
-      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:frida\/frida-swift.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:telco\/telco-swift.git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
       "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "BAAD054289A41FFAA05F61B531C5D333B7F21677"
     }

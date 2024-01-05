@@ -1,6 +1,6 @@
 import Foundation
 
-@objc(FridaDeviceDelegate)
+@objc(TelcoDeviceDelegate)
 public protocol DeviceDelegate {
     @objc optional func deviceLost(_ device: Device)
     @objc optional func device(_ device: Device, didAddSpawn spawn: SpawnDetails)

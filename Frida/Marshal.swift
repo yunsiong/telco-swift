@@ -1,4 +1,4 @@
-import CFrida
+import CTelco
 
 class Marshal {
     private static let gvariantStringType = g_variant_type_new("s")
@@ -12,40 +12,40 @@ class Marshal {
     private static let dateFormatter = makeDateFormatter()
 
     static func takeNativeError(_ error: UnsafeMutablePointer<GError>) -> Error {
-        let code = FridaError.init(UInt32(error.pointee.code))
+        let code = TelcoError.init(UInt32(error.pointee.code))
         let message = String(cString: error.pointee.message)
 
         g_error_free(error)
 
         switch code {
-        case FRIDA_ERROR_SERVER_NOT_RUNNING:
+        case TELCO_ERROR_SERVER_NOT_RUNNING:
             return Error.serverNotRunning(message)
-        case FRIDA_ERROR_EXECUTABLE_NOT_FOUND:
+        case TELCO_ERROR_EXECUTABLE_NOT_FOUND:
             return Error.executableNotFound(message)
-        case FRIDA_ERROR_EXECUTABLE_NOT_SUPPORTED:
+        case TELCO_ERROR_EXECUTABLE_NOT_SUPPORTED:
             return Error.executableNotSupported(message)
-        case FRIDA_ERROR_PROCESS_NOT_FOUND:
+        case TELCO_ERROR_PROCESS_NOT_FOUND:
             return Error.processNotFound(message)
-        case FRIDA_ERROR_PROCESS_NOT_RESPONDING:
+        case TELCO_ERROR_PROCESS_NOT_RESPONDING:
             return Error.processNotResponding(message)
-        case FRIDA_ERROR_INVALID_ARGUMENT:
+        case TELCO_ERROR_INVALID_ARGUMENT:
             return Error.invalidArgument(message)
-        case FRIDA_ERROR_INVALID_OPERATION:
+        case TELCO_ERROR_INVALID_OPERATION:
             return Error.invalidOperation(message)
-        case FRIDA_ERROR_PERMISSION_DENIED:
+        case TELCO_ERROR_PERMISSION_DENIED:
             return Error.permissionDenied(message)
-        case FRIDA_ERROR_ADDRESS_IN_USE:
+        case TELCO_ERROR_ADDRESS_IN_USE:
             return Error.addressInUse(message)
-        case FRIDA_ERROR_TIMED_OUT:
+        case TELCO_ERROR_TIMED_OUT:
             return Error.timedOut(message)
-        case FRIDA_ERROR_NOT_SUPPORTED:
+        case TELCO_ERROR_NOT_SUPPORTED:
             return Error.notSupported(message)
-        case FRIDA_ERROR_PROTOCOL:
+        case TELCO_ERROR_PROTOCOL:
             return Error.protocolViolation(message)
-        case FRIDA_ERROR_TRANSPORT:
+        case TELCO_ERROR_TRANSPORT:
             return Error.transport(message)
         default:
-            fatalError("Unexpected Frida error code")
+            fatalError("Unexpected Telco error code")
         }
     }
 

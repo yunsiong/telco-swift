@@ -1,6 +1,6 @@
-import CFrida
+import CTelco
 
-@objc(FridaProcessDetails)
+@objc(TelcoProcessDetails)
 public class ProcessDetails: NSObject, NSCopying {
     private let handle: OpaquePointer
 
@@ -18,15 +18,15 @@ public class ProcessDetails: NSObject, NSCopying {
     }
 
     public var pid: UInt {
-        return UInt(frida_process_get_pid(handle))
+        return UInt(telco_process_get_pid(handle))
     }
 
     public var name: String {
-        return String(cString: frida_process_get_name(handle))
+        return String(cString: telco_process_get_name(handle))
     }
 
     public lazy var parameters: [String: Any] = {
-        var result = Marshal.dictionaryFromParametersDict(frida_process_get_parameters(handle))
+        var result = Marshal.dictionaryFromParametersDict(telco_process_get_parameters(handle))
 
         if let started = result["started"] as? String {
             result["started"] = Marshal.dateFromISO8601(started) ?? NSNull()
@@ -43,7 +43,7 @@ public class ProcessDetails: NSObject, NSCopying {
     }()
 
     public override var description: String {
-        return "Frida.ProcessDetails(pid: \(pid), name: \"\(name)\", parameters: \(parameters))"
+        return "Telco.ProcessDetails(pid: \(pid), name: \"\(name)\", parameters: \(parameters))"
     }
 
     public override func isEqual(_ object: Any?) -> Bool {

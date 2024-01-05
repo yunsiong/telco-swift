@@ -1,6 +1,6 @@
-import CFrida
+import CTelco
 
-@objc(FridaSpawnDetails)
+@objc(TelcoSpawnDetails)
 public class SpawnDetails: NSObject, NSCopying {
     private let handle: OpaquePointer
 
@@ -18,11 +18,11 @@ public class SpawnDetails: NSObject, NSCopying {
     }
 
     public var pid: UInt {
-        return UInt(frida_spawn_get_pid(handle))
+        return UInt(telco_spawn_get_pid(handle))
     }
 
     public var identifier: String? {
-        if let rawIdentifier = frida_spawn_get_identifier(handle) {
+        if let rawIdentifier = telco_spawn_get_identifier(handle) {
             return String(cString: rawIdentifier)
         }
         return nil
@@ -30,9 +30,9 @@ public class SpawnDetails: NSObject, NSCopying {
 
     public override var description: String {
         if let identifier = self.identifier {
-            return "Frida.SpawnDetails(pid: \(pid), identifier: \"\(identifier)\")"
+            return "Telco.SpawnDetails(pid: \(pid), identifier: \"\(identifier)\")"
         } else {
-            return "Frida.SpawnDetails(pid: \(pid))"
+            return "Telco.SpawnDetails(pid: \(pid))"
         }
     }
 

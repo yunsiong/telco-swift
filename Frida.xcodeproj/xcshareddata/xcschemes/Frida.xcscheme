@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "0C9289331CA6F06C00FBA302"
-               BuildableName = "Frida.framework"
-               BlueprintName = "Frida"
-               ReferencedContainer = "container:Frida.xcodeproj">
+               BuildableName = "Telco.framework"
+               BlueprintName = "Telco"
+               ReferencedContainer = "container:Telco.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -51,9 +51,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "0C9289331CA6F06C00FBA302"
-            BuildableName = "Frida.framework"
-            BlueprintName = "Frida"
-            ReferencedContainer = "container:Frida.xcodeproj">
+            BuildableName = "Telco.framework"
+            BlueprintName = "Telco"
+            ReferencedContainer = "container:Telco.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>

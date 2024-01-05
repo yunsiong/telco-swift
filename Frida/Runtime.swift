@@ -1,4 +1,4 @@
-import CFrida
+import CTelco
 
 class Runtime {
     typealias Handler = @convention(block) () -> Void
@@ -7,7 +7,7 @@ class Runtime {
         DispatchQueue.main.async(execute: handler)
     }
 
-    static func scheduleOnFridaThread(_ handler: @escaping Handler) {
+    static func scheduleOnTelcoThread(_ handler: @escaping Handler) {
         let data = gpointer(Unmanaged.passRetained(ScheduledOperation(handler: handler)).toOpaque())
         let source = g_idle_source_new()
         g_source_set_callback(source, { data in
@@ -15,7 +15,7 @@ class Runtime {
             operation.handler()
             return gboolean(0)
         }, data, nil)
-        g_source_attach(source, frida_get_main_context())
+        g_source_attach(source, telco_get_main_context())
         g_source_unref(source)
     }
 

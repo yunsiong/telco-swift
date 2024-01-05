@@ -1,6 +1,6 @@
-import CFrida
+import CTelco
 
-@objc(FridaCrashDetails)
+@objc(TelcoCrashDetails)
 public class CrashDetails: NSObject, NSCopying {
     private let handle: OpaquePointer
 
@@ -18,27 +18,27 @@ public class CrashDetails: NSObject, NSCopying {
     }
 
     public var pid: UInt {
-        return UInt(frida_crash_get_pid(handle))
+        return UInt(telco_crash_get_pid(handle))
     }
 
     public var processName: String {
-        return String(cString: frida_crash_get_process_name(handle))
+        return String(cString: telco_crash_get_process_name(handle))
     }
 
     public var summary: String {
-        return String(cString: frida_crash_get_summary(handle))
+        return String(cString: telco_crash_get_summary(handle))
     }
 
     public var report: String {
-        return String(cString: frida_crash_get_report(handle))
+        return String(cString: telco_crash_get_report(handle))
     }
 
     public lazy var parameters: [String: Any] = {
-        return Marshal.dictionaryFromParametersDict(frida_crash_get_parameters(handle))
+        return Marshal.dictionaryFromParametersDict(telco_crash_get_parameters(handle))
     }()
 
     public override var description: String {
-        return "Frida.CrashDetails(pid: \(pid), processName: \"\(processName)\", summary: \"\(summary)\")"
+        return "Telco.CrashDetails(pid: \(pid), processName: \"\(processName)\", summary: \"\(summary)\")"
     }
 
     public override func isEqual(_ object: Any?) -> Bool {

@@ -1,6 +1,6 @@
-import CFrida
+import CTelco
 
-@objc(FridaBus)
+@objc(TelcoBus)
 public class Bus: NSObject, NSCopying {
     public weak var delegate: BusDelegate?
 
@@ -37,7 +37,7 @@ public class Bus: NSObject, NSCopying {
     deinit {
         let rawHandle = gpointer(handle)
         let handlers = [onDetachedHandler, onMessageHandler]
-        Runtime.scheduleOnFridaThread {
+        Runtime.scheduleOnTelcoThread {
             for handler in handlers {
                 g_signal_handler_disconnect(rawHandle, handler)
             }
@@ -46,11 +46,11 @@ public class Bus: NSObject, NSCopying {
     }
 
     public var isClosed: Bool {
-        return frida_bus_is_detached(handle) != 0
+        return telco_bus_is_detached(handle) != 0
     }
 
     public override var description: String {
-        return "Frida.Bus()"
+        return "Telco.Bus()"
     }
 
     public override func isEqual(_ object: Any?) -> Bool {
@@ -66,12 +66,12 @@ public class Bus: NSObject, NSCopying {
     }
 
     public func attach(_ completionHandler: @escaping AttachComplete = { _ in }) {
-        Runtime.scheduleOnFridaThread {
-            frida_bus_attach(self.handle, nil, { source, result, data in
+        Runtime.scheduleOnTelcoThread {
+            telco_bus_attach(self.handle, nil, { source, result, data in
                 let operation = Unmanaged<AsyncOperation<AttachComplete>>.fromOpaque(data!).takeRetainedValue()
 
                 var rawError: UnsafeMutablePointer<GError>? = nil
-                frida_bus_attach_finish(OpaquePointer(source), result, &rawError)
+                telco_bus_attach_finish(OpaquePointer(source), result, &rawError)
                 if let rawError = rawError {
                     let error = Marshal.takeNativeError(rawError)
                     Runtime.scheduleOnMainThread {
@@ -93,7 +93,7 @@ public class Bus: NSObject, NSCopying {
 
         let rawData = Marshal.bytesFromData(data)
 
-        frida_bus_post(handle, json, rawData)
+        telco_bus_post(handle, json, rawData)
 
         g_bytes_unref(rawData)
     }

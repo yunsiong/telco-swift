@@ -1,6 +1,6 @@
-import CFrida
+import CTelco
 
-@objc(FridaIOStream)
+@objc(TelcoIOStream)
 public class IOStream: NSObject, NSCopying {
     public typealias CloseComplete = (_ result: CloseResult) -> Void
     public typealias CloseResult = () throws -> Bool
@@ -45,7 +45,7 @@ public class IOStream: NSObject, NSCopying {
     }
 
     public override var description: String {
-        return "Frida.IOStream()"
+        return "Telco.IOStream()"
     }
 
     public override func isEqual(_ object: Any?) -> Bool {
@@ -61,7 +61,7 @@ public class IOStream: NSObject, NSCopying {
     }
 
     public func close(_ count: UInt, completionHandler: @escaping CloseComplete) {
-        Runtime.scheduleOnFridaThread {
+        Runtime.scheduleOnTelcoThread {
             g_io_stream_close_async(self.handle, self.ioPriority, nil, { source, result, data in
                 let operation = Unmanaged<AsyncOperation<CloseComplete>>.fromOpaque(data!).takeRetainedValue()
 
@@ -83,7 +83,7 @@ public class IOStream: NSObject, NSCopying {
     }
 
     public func read(_ count: UInt, completionHandler: @escaping ReadComplete) {
-        Runtime.scheduleOnFridaThread {
+        Runtime.scheduleOnTelcoThread {
             g_input_stream_read_bytes_async(self.input, count, self.ioPriority, nil, { source, result, data in
                 let operation = Unmanaged<AsyncOperation<ReadComplete>>.fromOpaque(data!).takeRetainedValue()
 
@@ -109,7 +109,7 @@ public class IOStream: NSObject, NSCopying {
     }
 
     public func readAll(_ count: UInt, completionHandler: @escaping ReadAllComplete) {
-        Runtime.scheduleOnFridaThread {
+        Runtime.scheduleOnTelcoThread {
             let buffer = g_malloc(count)!
             g_input_stream_read_all_async(self.input, buffer, count, self.ioPriority, nil, { source, result, data in
                 let operation = Unmanaged<AsyncOperation<ReadAllComplete>>.fromOpaque(data!).takeRetainedValue()
@@ -140,7 +140,7 @@ public class IOStream: NSObject, NSCopying {
     }
 
     public func write(_ data: Data, completionHandler: @escaping WriteComplete) {
-        Runtime.scheduleOnFridaThread {
+        Runtime.scheduleOnTelcoThread {
             let bytes = Marshal.bytesFromData(data)
             g_output_stream_write_bytes_async(self.output, bytes, self.ioPriority, nil, { source, result, data in
                 let operation = Unmanaged<AsyncOperation<WriteComplete>>.fromOpaque(data!).takeRetainedValue()
@@ -164,7 +164,7 @@ public class IOStream: NSObject, NSCopying {
     }
 
     public func writeAll(_ data: Data, completionHandler: @escaping WriteAllComplete) {
-        Runtime.scheduleOnFridaThread {
+        Runtime.scheduleOnTelcoThread {
             let buffer = data.withUnsafeBytes { (ptr: UnsafeRawBufferPointer) in
                 return g_memdup2(ptr.baseAddress, gsize(ptr.count))
             }
